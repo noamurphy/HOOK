@@ -9,7 +9,9 @@ from clmr.utils.checkpoint import load_encoder_checkpoint
 
 def main():
     # Load dataset
+    print("Loading dataset...")
     dataset = get_dataset("gtzan")
+    print("Dataset loaded successfully")
 
     # Initialize dataloader
     dataloader = DataLoader(
@@ -19,19 +21,23 @@ def main():
     drop_last=True,
     shuffle=False,
     )
+    print("Dataloader instantialized successfully")
 
     # Instantiate SampleCNN model
+    print("Loading model...")
     strides = [3, 3, 3, 3, 3, 3, 3, 3, 3]
     model = SampleCNN(strides)
 
     # Load pre-trained checkpoint
-    checkpoint_path = "CLMR/clmr_checkpoints/clmr_checkpoint_10000/clmr_checkpoint_10000.pt"
+    checkpoint_path = "clmr_checkpoints/clmr_checkpoint_10000/clmr_checkpoint_10000.pt"
     state_dict = load_encoder_checkpoint(checkpoint_path)    
     
     # Load checkpoint into model
     model.load_state_dict(state_dict)
+    print("Model loaded successfully")
     
     # Run model to get representations
+    print("Evaluating representations...")
     model.eval()
     all_representations = []
     with torch.no_grad():
@@ -41,9 +47,11 @@ def main():
           all_representations.append(representations)
 
     all_representations = torch.cat(all_representations)
+    print("Representations evaluated: saving to file...")
     # Save representation object
     with open('representations.pkl', 'wb') as f:
       pickle.dump(all_representations, f)
+    print("Representations saved to 'representations.pkl'")
       
 if __name__ == '__main__':
     main()

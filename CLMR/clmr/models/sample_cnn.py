@@ -4,11 +4,10 @@ from .model import Model
 
 
 class SampleCNN(Model):
-    def __init__(self, strides, supervised, out_dim):
+    def __init__(self, strides):
         super(SampleCNN, self).__init__()
 
         self.strides = strides
-        self.supervised = supervised
         self.sequential = [
             nn.Sequential(
                 nn.Conv1d(1, 128, kernel_size=3, stride=3, padding=0),
