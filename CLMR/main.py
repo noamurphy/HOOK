@@ -3,9 +3,9 @@ import numpy as np
 import pickle
 from collections import OrderedDict
 from torch.utils.data import DataLoader
-from CLMR.clmr.datasets.dataset import get_dataset
-from CLMR.clmr.models.sample_cnn import SampleCNN
-from CLMR.clmr.utils.checkpoint import load_encoder_checkpoint
+from clmr.datasets import get_dataset
+from clmr.models import SampleCNN
+from clmr.utils.checkpoint import load_encoder_checkpoint
 
 def main():
     # Load dataset

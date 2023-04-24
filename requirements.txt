@@ -4,6 +4,5 @@ torch
 torchaudio
 pytorch-lightning
 soundfile
-sklearn
 matplotlib
 datasets[audio]
