@@ -53,5 +53,6 @@ class SampleCNN(Model):
         self.sequential = nn.Sequential(*self.sequential)
 
     def forward(self, x):
+        x = x[:, 0, :]
         out = self.sequential(x)
         return x
