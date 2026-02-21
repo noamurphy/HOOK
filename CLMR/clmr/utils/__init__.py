@@ -1,1 +1,0 @@
-from .checkpoint import load_encoder_checkpoint
