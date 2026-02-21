@@ -1,9 +1,8 @@
-simclr
 torchaudio-augmentations
 torch
 torchaudio
+hnswlib
 pytorch-lightning
 soundfile
 matplotlib
 datasets[audio]
-pickle-mixin
