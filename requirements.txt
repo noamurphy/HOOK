@@ -5,4 +5,4 @@ hnswlib
 pytorch-lightning
 soundfile
 matplotlib
-datasets[audio]
+datasets

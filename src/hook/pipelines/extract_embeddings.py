@@ -1,6 +1,7 @@
 # Derived from CLMR: https://github.com/Spijkervet/CLMR (Apache-2.0).
 # Modifications for HOOK are licensed under Apache-2.0.
 import os
+import time
 import torch
 import pickle
 from torch.utils.data import DataLoader
@@ -19,7 +20,7 @@ def main():
     dataset,
     batch_size=48,
     num_workers=0,
-    drop_last=True,
+    drop_last=False,
     shuffle=False,
     )
     print("Dataloader instantialized successfully")
@@ -41,13 +42,22 @@ def main():
     print("Evaluating representations...")
     model.eval()
     all_representations = []
+    total_batches = len(dataloader)
+    start_time = time.time()
     with torch.no_grad():
-      for data, target in dataloader:
+      for batch_idx, (data, target) in enumerate(dataloader, start=1):
           # pass the data through the model to get representations
           representations = model(data)
           all_representations.append(representations)
+          if batch_idx % 10 == 0 or batch_idx == total_batches:
+              elapsed = time.time() - start_time
+              print(
+                  f"Processed batch {batch_idx}/{total_batches} "
+                  f"({elapsed:.1f}s elapsed)"
+              )
 
     all_representations = torch.cat(all_representations)
+    print(f"Total embeddings produced: {all_representations.shape[0]}")
     print("Representations evaluated: saving to file...")
     # Save representation object
     os.makedirs("artifacts/embeddings", exist_ok=True)

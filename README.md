@@ -40,6 +40,15 @@ pip install -e .
 python -m hook.pipelines.extract_embeddings
 ```
 
+Dataset source note:
+
+- Default candidates are tried in order: `sanchit-gandhi/gtzan`, `marsyas/gtzan`, `ParitKansal/marsyas-gtzan`.
+- Override with:
+
+```bash
+export HOOK_GTZAN_DATASET_ID=sanchit-gandhi/gtzan
+```
+
 3. Build GTZAN metadata:
 
 ```bash

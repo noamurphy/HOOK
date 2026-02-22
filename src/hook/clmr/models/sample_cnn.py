@@ -55,6 +55,10 @@ class SampleCNN(Model):
         self.sequential = nn.Sequential(*self.sequential)
 
     def forward(self, x):
-        x = x[:, 0, :]
+        # Accept [B, T] or [B, C, T] inputs and normalize to mono [B, 1, T].
+        if x.dim() == 2:
+            x = x.unsqueeze(1)
+        elif x.dim() == 3 and x.size(1) != 1:
+            x = x.mean(dim=1, keepdim=True)
         out = self.sequential(x)
         return out
