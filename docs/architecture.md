@@ -43,6 +43,7 @@ It uses frozen CLMR embeddings to find tracks near the "in-between" space of sel
 - Frozen encoder for MVP: reduces risk and enables faster product iteration.
 - Retrieval-first architecture before recommender ranking/personalization.
 - Lazy import of augmentation package so non-contrastive paths are less brittle.
+- Runtime and inference compatibility decisions are tracked in `docs/decisions.md`.
 
 ## Next Architecture Milestones
 
@@ -50,4 +51,3 @@ It uses frozen CLMR embeddings to find tracks near the "in-between" space of sel
 2. Persist ANN index to disk in `artifacts/indexes/`.
 3. Add evaluation harness (recall@k, qualitative "between genre" judgments).
 4. Introduce reranking and eventually personalized recommendation logic.
-

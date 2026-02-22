@@ -25,6 +25,7 @@ The SampleCNN used to produce musical representations in HOOK is trained by Cont
 - `docs/retrieval-mvp.md`: retrieval usage and success criteria.
 - `docs/data-sources.md`: dataset strategy and metadata contract.
 - `docs/development.md`: environment and daily dev commands.
+- `docs/decisions.md`: engineering decisions that affect reproducibility and evaluation.
 
 ## Quickstart
 

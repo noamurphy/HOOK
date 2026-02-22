@@ -50,3 +50,6 @@ python -m hook.retrieval.cli \
 2. Retrieval latency remains practical for iterative exploration.
 3. Query behavior is stable across repeated runs with same inputs.
 
+## Evaluation Context
+
+Refer to `docs/decisions.md` for runtime and inference preprocessing decisions that affect comparability with older notebook-era results.
