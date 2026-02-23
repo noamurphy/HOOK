@@ -1,6 +1,7 @@
 import argparse
 import csv
 import os
+from pathlib import Path
 
 GENRES = [
     "blues",
@@ -66,7 +67,10 @@ def main() -> None:
     if "audio" in ds.column_names:
         ds = ds.cast_column("audio", Audio(decode=False))
     with open(args.out_csv, "w", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=["item_id", "genre", "source_path", "split"])
+        writer = csv.DictWriter(
+            f,
+            fieldnames=["item_id", "genre", "title", "artist", "source_path", "split"],
+        )
         writer.writeheader()
         for i, row in enumerate(ds):
             genre = GENRES[row["genre"]]
@@ -76,10 +80,13 @@ def main() -> None:
                 file_path = row["audio"].get("path")
             else:
                 file_path = ""
+            title = Path(file_path).stem if file_path else f"gtzan_{args.split}_{i}"
             writer.writerow(
                 {
                     "item_id": f"gtzan_{args.split}_{i}",
                     "genre": genre,
+                    "title": title,
+                    "artist": "",
                     "source_path": file_path,
                     "split": args.split,
                 }

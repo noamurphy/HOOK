@@ -107,18 +107,23 @@ class GenreRetriever:
         k: int = 10,
         weights: Optional[Sequence[float]] = None,
     ) -> List[Tuple[str, str, float]]:
+        indexed = self.recommend_between_indexed(genres=genres, k=k, weights=weights)
+        return [(self.item_ids[i], self.item_genres[i], score) for i, score in indexed]
+
+    def recommend_between_indexed(
+        self,
+        genres: Sequence[str],
+        k: int = 10,
+        weights: Optional[Sequence[float]] = None,
+    ) -> List[Tuple[int, float]]:
         target = self._target_vector(genres, weights=weights)
 
         if self.backend == "hnswlib" and self._index is not None:
             labels, distances = self._index.knn_query(target, k=k)
             labels = labels[0]
             distances = distances[0]
-            return [
-                (self.item_ids[i], self.item_genres[i], float(1.0 - d))
-                for i, d in zip(labels, distances)
-            ]
+            return [(int(i), float(1.0 - d)) for i, d in zip(labels, distances)]
 
         sims = self.embeddings @ target
         top_idx = np.argsort(-sims)[:k]
-        return [(self.item_ids[i], self.item_genres[i], float(sims[i])) for i in top_idx]
-
+        return [(int(i), float(sims[i])) for i in top_idx]

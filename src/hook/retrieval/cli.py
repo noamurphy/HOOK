@@ -1,6 +1,6 @@
 import argparse
 import csv
-from typing import List
+from typing import Dict, List
 
 from .genre_retriever import GenreRetriever, load_embeddings_file
 
@@ -31,9 +31,11 @@ def main() -> None:
     embeddings = load_embeddings_file(args.embeddings_pkl)
     item_ids = []
     item_genres = []
+    metadata_rows: List[Dict[str, str]] = []
     with open(args.metadata_csv, "r", newline="") as f:
         reader = csv.DictReader(f)
         for row in reader:
+            metadata_rows.append(row)
             item_ids.append(row["item_id"])
             item_genres.append(row["genre"])
 
@@ -49,15 +51,28 @@ def main() -> None:
     if args.weights:
         weights = [float(x) for x in _parse_csv_list(args.weights)]
 
-    results = retriever.recommend_between(genres=genres, k=args.k, weights=weights)
+    results = retriever.recommend_between_indexed(genres=genres, k=args.k, weights=weights)
 
     print(f"Query genres: {genres}")
     print(f"Available genres: {retriever.available_genres()}")
-    print("Top results (item_id, genre, similarity):")
-    for item_id, genre, score in results:
-        print(f"{item_id}, {genre}, {score:.4f}")
+    print("Top results:")
+    for idx, score in results:
+        row = metadata_rows[idx]
+        item_id = row.get("item_id", item_ids[idx])
+        genre = row.get("genre", item_genres[idx])
+        title = row.get("title", "")
+        artist = row.get("artist", "")
+        source_path = row.get("source_path", "")
+
+        parts = [f"item_id={item_id}", f"genre={genre}", f"similarity={score:.4f}"]
+        if title:
+            parts.append(f"title={title}")
+        if artist:
+            parts.append(f"artist={artist}")
+        if source_path:
+            parts.append(f"source_path={source_path}")
+        print(" | ".join(parts))
 
 
 if __name__ == "__main__":
     main()
-
